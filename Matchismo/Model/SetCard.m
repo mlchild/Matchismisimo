@@ -48,9 +48,13 @@
 
 
 - (NSString *)contents {
-    NSArray *numberStrings = [SetCard numberStrings];
-    return [numberStrings[self.number] stringByAppendingString:self.symbol];
     
+    NSString *contents = @"";
+    for (int i=0; i<[SetCard maxNumber]; i++) {
+        contents = [contents stringByAppendingString:self.symbol];
+        }
+    return contents;
+
 }
 
 
@@ -111,13 +115,13 @@
 
 
 //probably more complicated than necessary but OH WELL
-+ (NSArray *)numberStrings {
-    return @[@"?",@"1",@"2",@"3"];
++ (NSArray *)numbers {
+    return @[@1,@2,@3];
 }
 
 
 + (NSUInteger)maxNumber {
-    return [self numberStrings].count-1;
+    return [self numbers].count-1;
 }
 
 
