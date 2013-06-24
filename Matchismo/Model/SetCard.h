@@ -10,6 +10,7 @@
 
 @interface SetCard : Card
 
+
 @property (strong, nonatomic) NSString *symbol;
 @property (nonatomic) NSUInteger number;
 @property (strong, nonatomic) NSString *color; //stroke

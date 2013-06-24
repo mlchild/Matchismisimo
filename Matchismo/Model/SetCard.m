@@ -10,13 +10,49 @@
 
 @implementation SetCard
 
-
-/*
-- (NSString *)contents {
-    NSArray *rankStrings = [PlayingCard rankStrings];
-    return [rankStrings[self.rank] stringByAppendingString:self.color];
+- (int)match:(NSArray *)otherCards {
+    
+    int score = 0;
+    
+    SetCard *firstCard = otherCards[0];
+    SetCard *secondCard = otherCards[1];
+    
+    if ((self.symbol == firstCard.symbol &&
+         self.symbol == secondCard.symbol) ||
+        (self.symbol != firstCard.symbol &&
+         self.symbol != secondCard.symbol &&
+         firstCard.symbol != secondCard.symbol)) {
+        if ((self.color == firstCard.color &&
+             self.color == secondCard.color) ||
+            (self.color != firstCard.color &&
+             self.color != secondCard.color &&
+             firstCard.color != secondCard.color)) {
+            if ((self.shading == firstCard.shading &&
+                 self.shading == secondCard.shading) ||
+                (self.shading != firstCard.shading &&
+                 self.shading != secondCard.shading &&
+                 firstCard.shading != secondCard.shading)) {
+                if ((self.number == firstCard.number &&
+                     self.number == secondCard.number) ||
+                    (self.number != firstCard.number &&
+                     self.number != secondCard.number &&
+                     firstCard.number != secondCard.number)) {
+                        score = 1;
+                    }
+                }
+            }
+        }
+    
+    return score;
 }
- */
+
+
+- (NSString *)contents {
+    NSArray *numberStrings = [SetCard numberStrings];
+    return [numberStrings[self.number] stringByAppendingString:self.symbol];
+    
+}
+
 
 @synthesize symbol = _symbol;
 @synthesize color = _color;
@@ -25,7 +61,7 @@
 + (NSArray *)validSymbols {
     
     NSArray *validSymbols = nil;
-    if (!validSymbols) validSymbols = @[@"▲", @"●", @"◼"];
+    if (!validSymbols) validSymbols = @[@"▲", @"●", @"■"];
     return validSymbols;
 }
 
@@ -59,7 +95,7 @@
 + (NSArray *)validShadings {
     
     NSArray *validShadings = nil;
-    if (!validShadings) validShadings = @[@"filled", @"blank", @"grey"];
+    if (!validShadings) validShadings = @[@"filled", @"blank", @"gray"];
     return validShadings;
 }
 
@@ -74,7 +110,7 @@
 }
 
 
-
+//probably more complicated than necessary but OH WELL
 + (NSArray *)numberStrings {
     return @[@"?",@"1",@"2",@"3"];
 }

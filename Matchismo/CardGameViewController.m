@@ -9,6 +9,7 @@
 #import "CardGameViewController.h"
 #import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
+#import "SetCardDeck.h"
 
 @interface CardGameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
@@ -48,22 +49,61 @@
     for (UIButton *cardButton in self.cardButtons) {
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         
-        [cardButton setTitle:card.contents forState:UIControlStateSelected];
-        [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled];
+        //NSLog(@"%d %@ %@ %@", card.number, card.symbol, card.color, card.shading);
+        //NSLog(@"Contents: %@", card.contents);
+        
+        //introspect here and use attributed strings if it's a set game
+        //use card.attributedContents
+        if ([card isMemberOfClass:[SetCard class]]) {
+            
+            SetCard *setCard = (SetCard *)card;
+            
+            //STROKE AND FILLCOLOR MISNAMED
+            //NSLog(@"FillString: %@", setCard.color);
+            UIColor *fillColor = nil;
+            if ([setCard.color  isEqual: @"green"]) {
+                fillColor = [UIColor greenColor];
+            } else if ([setCard.color  isEqual: @"blue"]) {
+                fillColor = [UIColor blueColor];
+            } else if ([setCard.color  isEqual: @"red"]) {
+                fillColor = [UIColor redColor];
+            }
+            //NSLog(@"Fill: %@", fillColor);
+            
+            //STROKE AND FILLCOLOR MISNAMED
+            UIColor *strokeColor = nil;
+            if ([setCard.shading isEqual: @"filled"]) {
+                strokeColor = fillColor;
+            } else if ([setCard.shading isEqual: @"blank"]) {
+                strokeColor = [UIColor whiteColor];
+            } else if ([setCard.shading  isEqual: @"gray"]) {
+                strokeColor = [UIColor grayColor];
+            }
+            //NSLog(@"%@", strokeColor);
+             
+            NSDictionary *attributes =
+            @{NSForegroundColorAttributeName : strokeColor,
+              NSStrokeWidthAttributeName : @-2,
+              NSStrokeColorAttributeName : fillColor};
+            
+            NSMutableAttributedString *cardAttributedTitle = [[NSMutableAttributedString alloc] initWithString:setCard.contents attributes:attributes];
+            
+            [cardButton setAttributedTitle:cardAttributedTitle forState:UIControlStateNormal];
+            //NSLog(@"Title: %@", cardButton.currentAttributedTitle);
+            
+        } else {
+            [cardButton setTitle:card.contents forState:UIControlStateSelected];
+            [cardButton setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled];
+        }
+        
+        
         cardButton.selected = card.isFaceUp;
         cardButton.enabled = !card.isUnplayable;
-        cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
-        
-        //cutting the attempt at images
-        if (!cardButton.selected) {
-            //[cardButton setImage:[UIImage imageNamed:@"lil wayne.jpg"] forState:UIControlStateNormal];
-        } else {
-            //[cardButton setImage:nil forState:UIControlStateNormal];
-        }
+        cardButton.alpha = card.isUnplayable ? 0.05 : 1.0;
         
 
     }
-    
+    /*
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     
     int scoreChange = self.game.score - self.game.oldScore;
@@ -71,7 +111,7 @@
         self.whatHappenedLabel.text = [NSString stringWithFormat:@"%@ for %d points", self.game.matchStatus, scoreChange];
     } else {
         self.whatHappenedLabel.text = [NSString stringWithFormat:@"Let's get started!"];
-    }
+    } */
 }
 
 - (void)setFlipCount:(int)flipCount {
