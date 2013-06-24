@@ -77,6 +77,8 @@
                     }
                 }
                 
+                /*
+                //but really i should have something that checks what kind of game we're playing
                 if (self.matchCount == 3) {
                     //NSLog(@"trying to play 3 segment game");
                     Card *firstUpCard = nil;
@@ -107,6 +109,40 @@
                         }
                     }
                 }
+                */
+                
+                //setgame version
+                if (self.matchCount == 3) {
+                    //NSLog(@"trying to play 3 segment game");
+                    Card *firstUpCard = nil;
+                    Card *secondUpCard = nil;
+                    for (Card *otherCard in self.cards) {
+                        if (otherCard.isFaceUp && !otherCard.isUnplayable && !firstUpCard) {
+                            //first (maybe only) one other card faceUp/playable
+                            firstUpCard = otherCard;
+                        } else if (otherCard.isFaceUp && !otherCard.isUnplayable && firstUpCard) {
+                            secondUpCard = otherCard;
+                            //two cards faceUp/playable
+                            int matchScore = [card match:@[firstUpCard, secondUpCard]];
+                            if (matchScore) {
+                                firstUpCard.unplayable = YES;
+                                secondUpCard.unplayable = YES;
+                                card.unplayable = YES;
+                                //a match
+                                self.matchStatus = [NSString stringWithFormat:@"match"];
+                                self.score += matchScore * MATCH_BONUS;
+                            } else {
+                                firstUpCard.faceUp = NO;
+                                secondUpCard.faceUp = NO;
+                                self.score -= MISMATCH_PENALTY;
+                                //a mismatch
+                                self.matchStatus = [NSString stringWithFormat:@"mismatch"];
+                            }
+                            break;
+                        }
+                    }
+                }
+                
                 
                 //just a flip
                 if (self.score == self.oldScore) {

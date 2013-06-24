@@ -49,8 +49,8 @@
     for (UIButton *cardButton in self.cardButtons) {
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         
-        //NSLog(@"%d %@ %@ %@", card.number, card.symbol, card.color, card.shading);
-        //NSLog(@"Contents: %@", card.contents);
+        
+        NSLog(@"Contents: %@ for index: %d", card.contents, [self.cardButtons indexOfObject:cardButton]);
         
         //introspect here and use attributed strings if it's a set game
         //use card.attributedContents
@@ -89,7 +89,7 @@
             NSMutableAttributedString *cardAttributedTitle = [[NSMutableAttributedString alloc] initWithString:setCard.contents attributes:attributes];
             
             [cardButton setAttributedTitle:cardAttributedTitle forState:UIControlStateNormal];
-            //NSLog(@"Title: %@", cardButton.currentAttributedTitle);
+            NSLog(@"Title: %@", cardButton.currentAttributedTitle);
             
         } else {
             [cardButton setTitle:card.contents forState:UIControlStateSelected];
@@ -103,7 +103,7 @@
         
 
     }
-    /*
+    
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     
     int scoreChange = self.game.score - self.game.oldScore;
@@ -111,7 +111,7 @@
         self.whatHappenedLabel.text = [NSString stringWithFormat:@"%@ for %d points", self.game.matchStatus, scoreChange];
     } else {
         self.whatHappenedLabel.text = [NSString stringWithFormat:@"Let's get started!"];
-    } */
+    } 
 }
 
 - (void)setFlipCount:(int)flipCount {

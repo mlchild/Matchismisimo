@@ -17,26 +17,31 @@
     SetCard *firstCard = otherCards[0];
     SetCard *secondCard = otherCards[1];
     
-    if ((self.symbol == firstCard.symbol &&
-         self.symbol == secondCard.symbol) ||
-        (self.symbol != firstCard.symbol &&
-         self.symbol != secondCard.symbol &&
-         firstCard.symbol != secondCard.symbol)) {
-        if ((self.color == firstCard.color &&
-             self.color == secondCard.color) ||
-            (self.color != firstCard.color &&
-             self.color != secondCard.color &&
-             firstCard.color != secondCard.color)) {
-            if ((self.shading == firstCard.shading &&
-                 self.shading == secondCard.shading) ||
-                (self.shading != firstCard.shading &&
-                 self.shading != secondCard.shading &&
-                 firstCard.shading != secondCard.shading)) {
+    if (([self.symbol isEqual:firstCard.symbol] &&
+         [self.symbol isEqual:secondCard.symbol]) ||
+        (![self.symbol isEqual:firstCard.symbol] &&
+         ![self.symbol isEqual:secondCard.symbol] &&
+         ![firstCard.symbol isEqual:secondCard.symbol])) {
+            NSLog(@"Symbol match");
+        if (([self.color isEqual:firstCard.color] &&
+             [self.color isEqual:secondCard.color]) ||
+            (![self.color isEqual:firstCard.color] &&
+             ![self.color isEqual:secondCard.color] &&
+             ![firstCard.color isEqual:secondCard.color])) {
+                NSLog(@"Symbol and color match");
+            if (([self.shading isEqual:firstCard.shading] &&
+                 [self.shading isEqual:secondCard.shading]) ||
+                (![self.shading isEqual:firstCard.shading] &&
+                 ![self.shading isEqual:secondCard.shading] &&
+                 ![firstCard.shading isEqual:secondCard.shading])) {
+                    NSLog(@"Symbol, color, shading match");
+                    NSLog(@"Numbers: %d %d %d", self.number, firstCard.number, secondCard.number);
                 if ((self.number == firstCard.number &&
                      self.number == secondCard.number) ||
                     (self.number != firstCard.number &&
                      self.number != secondCard.number &&
                      firstCard.number != secondCard.number)) {
+                        NSLog(@"SET match");
                         score = 1;
                     }
                 }
@@ -50,9 +55,10 @@
 - (NSString *)contents {
     
     NSString *contents = @"";
-    for (int i=0; i<[SetCard maxNumber]; i++) {
+    for (int i=0; i<self.number; i++) {
         contents = [contents stringByAppendingString:self.symbol];
         }
+    //NSLog(@"Contents: %@", contents);
     return contents;
 
 }
@@ -121,7 +127,7 @@
 
 
 + (NSUInteger)maxNumber {
-    return [self numbers].count-1;
+    return [self numbers].count;
 }
 
 
