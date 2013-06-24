@@ -22,7 +22,6 @@
 
 @implementation CardGameViewController
 
-//testing git
 
 - (CardMatchingGame *)game {
     
@@ -55,10 +54,11 @@
         cardButton.enabled = !card.isUnplayable;
         cardButton.alpha = card.isUnplayable ? 0.3 : 1.0;
         
+        //cutting the attempt at images
         if (!cardButton.selected) {
-            [cardButton setImage:[UIImage imageNamed:@"lil wayne.jpg"] forState:UIControlStateNormal];
+            //[cardButton setImage:[UIImage imageNamed:@"lil wayne.jpg"] forState:UIControlStateNormal];
         } else {
-            [cardButton setImage:nil forState:UIControlStateNormal];
+            //[cardButton setImage:nil forState:UIControlStateNormal];
         }
         
 
