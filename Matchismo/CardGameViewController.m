@@ -49,8 +49,11 @@
     for (UIButton *cardButton in self.cardButtons) {
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         
+        //NSLog(@"Contents: %@ for index: %d", card.contents, [self.cardButtons indexOfObject:cardButton]);
         
-        NSLog(@"Contents: %@ for index: %d", card.contents, [self.cardButtons indexOfObject:cardButton]);
+        //TODO FOR GOOD PROGRAMMING:
+        //WRITE A METHOD THAT DOES ATTRIBUTED STRING PARSING
+        
         
         //introspect here and use attributed strings if it's a set game
         //use card.attributedContents
@@ -89,7 +92,7 @@
             NSMutableAttributedString *cardAttributedTitle = [[NSMutableAttributedString alloc] initWithString:setCard.contents attributes:attributes];
             
             [cardButton setAttributedTitle:cardAttributedTitle forState:UIControlStateNormal];
-            NSLog(@"Title: %@", cardButton.currentAttributedTitle);
+            //NSLog(@"Title: %@", cardButton.currentAttributedTitle);
             
         } else {
             [cardButton setTitle:card.contents forState:UIControlStateSelected];
@@ -108,7 +111,57 @@
     
     int scoreChange = self.game.score - self.game.oldScore;
     if (self.game.matchStatus) {
-        self.whatHappenedLabel.text = [NSString stringWithFormat:@"%@ for %d points", self.game.matchStatus, scoreChange];
+        if (self.game.cardsInPlay) {
+            
+            NSMutableAttributedString *matchAttributedString = [[NSMutableAttributedString alloc] initWithString:@""];
+            
+            for (Card *card in self.game.cardsInPlay) {
+                if ([card isMemberOfClass:[SetCard class]]) {
+                    
+                    SetCard *setCard = (SetCard *)card;
+                    
+                    //STROKE AND FILLCOLOR MISNAMED
+                    //NSLog(@"FillString: %@", setCard.color);
+                    UIColor *fillColor = nil;
+                    if ([setCard.color  isEqual: @"green"]) {
+                        fillColor = [UIColor greenColor];
+                    } else if ([setCard.color  isEqual: @"blue"]) {
+                        fillColor = [UIColor blueColor];
+                    } else if ([setCard.color  isEqual: @"red"]) {
+                        fillColor = [UIColor redColor];
+                    }
+                    //NSLog(@"Fill: %@", fillColor);
+                    
+                    //STROKE AND FILLCOLOR MISNAMED
+                    UIColor *strokeColor = nil;
+                    if ([setCard.shading isEqual: @"filled"]) {
+                        strokeColor = fillColor;
+                    } else if ([setCard.shading isEqual: @"blank"]) {
+                        strokeColor = [UIColor whiteColor];
+                    } else if ([setCard.shading  isEqual: @"gray"]) {
+                        strokeColor = [UIColor grayColor];
+                    }
+                    //NSLog(@"%@", strokeColor);
+                    
+                    NSDictionary *attributes =
+                    @{NSForegroundColorAttributeName : strokeColor,
+                      NSStrokeWidthAttributeName : @-2,
+                      NSStrokeColorAttributeName : fillColor};
+                    
+                    NSMutableAttributedString *cardAttributedTitle = [[NSMutableAttributedString alloc] initWithString:setCard.contents attributes:attributes];
+                    NSLog(@"Attributed Card: %@",cardAttributedTitle);
+                    
+                    [matchAttributedString appendAttributedString:cardAttributedTitle];           
+            
+                }
+            }
+            
+            [matchAttributedString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@ for %d points", self.game.matchStatus, scoreChange]]];
+            self.whatHappenedLabel.attributedText = matchAttributedString;
+            
+        } else {
+            self.whatHappenedLabel.text = [NSString stringWithFormat:@"%@ for %d points", self.game.matchStatus, scoreChange];
+        }
     } else {
         self.whatHappenedLabel.text = [NSString stringWithFormat:@"Let's get started!"];
     } 

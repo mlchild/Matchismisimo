@@ -129,14 +129,16 @@
                                 secondUpCard.unplayable = YES;
                                 card.unplayable = YES;
                                 //a match
-                                self.matchStatus = [NSString stringWithFormat:@"match"];
+                                self.matchStatus = [NSString stringWithFormat:@"Match"];
+                                self.cardsInPlay = @[card, firstUpCard, secondUpCard];
                                 self.score += matchScore * MATCH_BONUS;
                             } else {
                                 firstUpCard.faceUp = NO;
                                 secondUpCard.faceUp = NO;
                                 self.score -= MISMATCH_PENALTY;
                                 //a mismatch
-                                self.matchStatus = [NSString stringWithFormat:@"mismatch"];
+                                self.matchStatus = [NSString stringWithFormat:@"Mismatch"];
+                                self.cardsInPlay = @[card, firstUpCard, secondUpCard];
                             }
                             break;
                         }
@@ -146,7 +148,9 @@
                 
                 //just a flip
                 if (self.score == self.oldScore) {
-                    self.matchStatus = [NSString stringWithFormat:@"%@ flippin out",card.contents];
+                    if (self.matchCount==2) {self.matchStatus = [NSString stringWithFormat:@"%@ flippin out",card.contents]; }
+                    if (self.matchCount==3) {self.matchStatus = [NSString stringWithFormat:@"Flip"];}
+                    self.cardsInPlay = @[card];
                 }
             }
             self.score -= FLIP_COST;
